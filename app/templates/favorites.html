@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Favorites - EShopper
+{% endblock %}
+
+{% block page_title %}
+    Favorite Products
+{% endblock %}
+
+{% block breadcrumb %}
+    Favorites
+{% endblock %}
+
+{% block content %}
+
+    <!-- Cart Start -->
+    <div class="container-fluid pt-5">
+        <div class="row px-xl-5 justify-content-center">
+            <div class="col-lg-5 table-responsive mb-5">
+                <table class="table table-bordered text-center mb-0">
+                    <thead class="bg-secondary text-dark">
+                        <tr>
+                            <th>Products</th>
+                            <th>Price</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody class="align-middle">
+                        {% for product in favorite_products %}
+                            <tr>
+                                <td class="align-middle">
+                                    <img src="{{ url_for('static', filename=product.image) }}" alt="" style="width: 50px;"> {{ product.name }}
+                                </td>
+                                <td class="align-middle">${{ product.price }}</td>
+                                <td class="align-middle">
+                                    <form action="{{ url_for('routes_bp.remove_favorite', product_id=product.id) }}" method="POST">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                        <button class="btn btn-sm btn-primary" type="submit"><i class="fa fa-times"></i></button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Cart End -->
+
+    {% endblock %}
+    

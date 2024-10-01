@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Register - EShopper{% endblock %}
+
+{% block page_title %}Register{% endblock %}
+
+{% block breadcrumb %}Register{% endblock %}
+
+{% block content %}
+
+<!-- Register Form Start -->
+<div class="container-fluid pt-5">
+    <div class="text-center mb-4">
+        <h2 class="section-title px-5"><span class="px-2">Input Credentials For Register</span></h2>
+    </div>
+    <div class="row justify-content-center px-xl-5">
+        <div class="col-lg-4 mb-5">
+            <div class="contact-form">
+                <div id="success"></div>
+
+                <!-- WTForms-based Registration Form -->
+                <form method="POST" action="{{ url_for('routes_bp.register') }}">
+                    {{ form.hidden_tag()}}
+
+                    <div class="control-group">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control") }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+
+                    <div class="control-group">
+                        {{ form.email.label(class="form-label") }}
+                        {{ form.email(class="form-control") }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+
+                    <div class="control-group">
+                        {{ form.password.label(class="form-label") }}
+                        {{ form.password(class="form-control") }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+
+                    <div class="control-group">
+                        {{ form.confirm_password.label(class="form-label") }}
+                        {{ form.confirm_password(class="form-control") }}
+                        <p class="help-block text-danger"></p>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <button class="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Register</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Register Form End -->
+
+{% endblock %}
+
+

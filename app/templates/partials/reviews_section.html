@@ -1,0 +1,15 @@
+<h4 class="mb-4" id="review-count">{{ review_count }} review{{ review_count > 1 and 's' or '' }}</h4>
+
+<div id="reviews-section">
+  {% for review in reviews %}
+    <div class="media mb-4">
+      <img src="{{ url_for('static', filename='img/default-user.webp') }}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px" />
+      <div class="media-body">
+        <h6>{{ review.user.name }}<small> - <i>{{ review.create_date.strftime('%d %b %Y') }}</i></small></h6>
+        <p>{{ review.review }}</p>
+      </div>
+    </div>
+  {% else %}
+    <p>No reviews yet. Be the first to leave a review!</p>
+  {% endfor %}
+</div>

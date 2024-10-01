@@ -1,0 +1,185 @@
+-- Adminer 4.8.1 MySQL 8.0.39 dump
+
+SET NAMES utf8;
+SET time_zone = '+00:00';
+SET foreign_key_checks = 0;
+SET sql_mode = 'NO_AUTO_VALUE_ON_ZERO';
+
+SET NAMES utf8mb4;
+
+DROP TABLE IF EXISTS `alembic_version`;
+CREATE TABLE `alembic_version` (
+  `version_num` varchar(32) NOT NULL,
+  PRIMARY KEY (`version_num`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `alembic_version` (`version_num`) VALUES
+('350c7e8b2e8f');
+
+DROP TABLE IF EXISTS `category`;
+CREATE TABLE `category` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `active` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `category` (`id`, `name`, `active`) VALUES
+(1,	'Shirts',	'1'),
+(2,	'Jeans',	'1'),
+(3,	'Sweamwear',	'1'),
+(4,	'Sleepwear',	'1'),
+(5,	'Sportswear',	'1'),
+(6,	'Jumpsuits',	'1'),
+(7,	'Blazers',	'1'),
+(8,	'Jackets',	'1'),
+(9,	'Shoes',	'1');
+
+DROP TABLE IF EXISTS `contact`;
+CREATE TABLE `contact` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `name` text NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `subject` text NOT NULL,
+  `message` text NOT NULL,
+  `active` varchar(1) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `contact_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `contact` (`id`, `user_id`, `name`, `email`, `subject`, `message`, `active`, `create_date`) VALUES
+(1,	NULL,	'Sevinc Qurbanova',	'sevinctrf@gmail.com',	'Product is not good',	'Product is not gooddtrtegewwerfwwefwege',	'1',	'2024-10-01 12:42:28');
+
+DROP TABLE IF EXISTS `favorite`;
+CREATE TABLE `favorite` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `product_id` int DEFAULT NULL,
+  `active` varchar(1) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `favorite_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `favorite_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `favorite` (`id`, `user_id`, `product_id`, `active`, `create_date`, `end_date`) VALUES
+(3,	1,	7,	'1',	'2024-10-01 08:39:27',	NULL),
+(5,	4,	3,	'1',	'2024-10-01 08:42:20',	NULL),
+(6,	4,	4,	'1',	'2024-10-01 11:10:56',	NULL),
+(7,	4,	8,	'1',	'2024-10-01 11:27:52',	NULL);
+
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) NOT NULL,
+  `price` float NOT NULL,
+  `discounted_price` float DEFAULT NULL,
+  `img_path` varchar(255) DEFAULT NULL,
+  `description` text,
+  `active` varchar(1) DEFAULT NULL,
+  `category_id` int NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `product` (`id`, `name`, `price`, `discounted_price`, `img_path`, `description`, `active`, `category_id`) VALUES
+(1,	'Colorful Stylish Shirt',	123,	120,	'img/pr-1.webp',	'111111111Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat\r\n            diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem\r\n            magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore\r\n            stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum\r\n            diam et rebum kasd rebum.\r\nqqqqqqqqqqqqEos no lorem eirmod diam diam, eos elitr et gubergren diam sea.\r\n                Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero\r\n                diam ea vero et dolore rebum, dolor rebum eirmod consetetur\r\n                invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd\r\n                ipsum rebum diam. Dolore diam stet rebum sed tempor kasd eirmod.\r\n                Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut\r\n                diam consetetur duo justo est, sit sanctus diam tempor aliquyam\r\n                eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at\r\n                sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr\r\n                sanctus eirmod takimata dolor ea invidunt.',	'1',	1),
+(2,	'Colorful Stylish Shirt 2',	100,	80,	'img/pr-2.webp',	'22222 Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat\r\n            diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem\r\n            magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore\r\n            stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum\r\n            diam et rebum kasd rebum.                 rrrrrrrrrrrrrrrrrrrolore magna est eirmod sanctus dolor, amet diam et eirmod et\r\n                ipsum. Amet dolore tempor consetetur sed lorem dolor sit lorem\r\n                tempor. Gubergren amet amet labore sadipscing clita clita diam\r\n                clita. Sea amet et sed ipsum lorem elitr et, amet et labore\r\n                voluptua sit rebum. Ea erat sed et diam takimata sed justo.\r\n                Magna takimata justo et amet magna et.',	'1',	1),
+(3,	'Colorful Stylish Shirt3',	150,	145,	'img/pr-3.webp',	'3333 Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat\r\n            diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem\r\n            magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore\r\n            stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum\r\n            diam et rebum kasd rebum.',	'1',	1),
+(4,	'Colorful Stylish Shirt4',	180,	170,	'img/pr-4.webp',	'44444 Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat\r\n            diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem\r\n            magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore\r\n            stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum\r\n            diam et rebum kasd rebum.',	'1',	1),
+(5,	'Colorful Stylish Shirt5',	190,	181,	'img/pr-5.webp',	'5555 Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat\r\n            diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem\r\n            magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore\r\n            stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum\r\n            diam et rebum kasd rebum.',	'1',	1),
+(6,	'Colorful Stylish Shirt6',	164,	145,	'img/pr-6.webp',	'6 Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat\r\n            diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem\r\n            magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore\r\n            stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum\r\n            diam et rebum kasd rebum.',	'1',	1),
+(7,	'Colorful Stylish Shirt7',	161,	151,	'img/pr-7.webp',	'777 Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat\r\n            diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem\r\n            magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore\r\n            stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum\r\n            diam et rebum kasd rebum.',	'1',	1),
+(8,	'Colorful Stylish Shirt8',	112,	104,	'img/pr-8.webp',	'888 Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat\r\n            diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem\r\n            magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore\r\n            stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum\r\n            diam et rebum kasd rebum.',	'1',	1),
+(9,	'Colorful Stylish Shirt9',	129,	118,	'img/pr-9.webp',	'999999 Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat\r\n            diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem\r\n            magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore\r\n            stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum\r\n            diam et rebum kasd rebum.',	'1',	1);
+
+DROP TABLE IF EXISTS `product_detail_images`;
+CREATE TABLE `product_detail_images` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `product_id` int DEFAULT NULL,
+  `img_path` varchar(255) DEFAULT NULL,
+  `active` varchar(1) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `product_detail_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `product_detail_images` (`id`, `product_id`, `img_path`, `active`, `create_date`, `end_date`) VALUES
+(1,	1,	'img/detail/img1.1.png',	'1',	'2024-09-28 23:32:17',	NULL),
+(2,	1,	'img/detail/video1.2.mov',	'1',	'2024-09-28 23:32:29',	NULL),
+(3,	1,	'img/detail/img1.3.jfif',	'1',	'2024-09-28 23:32:38',	NULL),
+(4,	1,	'img/detail/img1.4.jfif',	'1',	'2024-09-28 23:32:47',	NULL),
+(5,	1,	'img/detail/img1.5.jfif',	'1',	'2024-09-28 23:32:56',	NULL),
+(6,	1,	'img/detail/img1.6.jfif',	'1',	'2024-09-28 23:33:07',	NULL),
+(7,	1,	'img/detail/img1.7.png',	'1',	'2024-09-28 23:33:16',	NULL),
+(8,	2,	'img/detail/img2.1.webp',	'1',	'2024-09-28 23:39:18',	NULL),
+(9,	2,	'img/detail/img2.2.webp',	'1',	'2024-09-28 23:40:29',	NULL),
+(10,	2,	'img/detail/img2.3.webp',	'1',	'2024-09-28 23:41:01',	NULL),
+(11,	2,	'img/detail/img2.4.webp',	'1',	'2024-09-28 23:41:34',	NULL);
+
+DROP TABLE IF EXISTS `review`;
+CREATE TABLE `review` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int DEFAULT NULL,
+  `review` text NOT NULL,
+  `active` varchar(1) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `product_id` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `review_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `review_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `review` (`id`, `user_id`, `review`, `active`, `create_date`, `product_id`) VALUES
+(1,	1,	'                        Diam amet duo labore stet elitr ea clita ipsum, tempor\r\n                        labore accusam ipsum et no at. Kasd diam tempor rebum\r\n                        magna dolores sed sed eirmod ipsum.',	'1',	'2024-10-01 07:47:39',	1),
+(2,	1,	'                        Diam amet duo labore stet elitr ea clita ipsum, tempor\r\n                        labore accusam ipsum et no at. Kasd diam tempor rebum\r\n                        magna dolores sed sed eirmod ipsum.',	'1',	'2024-10-01 07:48:06',	1),
+(3,	2,	'                        Diam amet duo labore stet elitr ea clita ipsum, tempor\r\n                        labore accusam ipsum et no at. Kasd diam tempor rebum\r\n                        magna dolores sed sed eirmod ipsum.',	'1',	'2024-10-01 07:48:19',	1),
+(4,	3,	'                        Diam amet duo labore stet elitr ea clita ipsum, tempor\r\n                        labore accusam ipsum et no at. Kasd diam tempor rebum\r\n                        magna dolores sed sed eirmod ipsum.',	'1',	'2024-10-01 07:48:34',	1),
+(5,	1,	'                        Diam amet duo labore stet elitr ea clita ipsum, tempor\r\n                        labore accusam ipsum et no at. Kasd diam tempor rebum\r\n                        magna dolores sed sed eirmod ipsum.',	'1',	'2024-10-01 07:48:46',	2),
+(6,	2,	'                        Diam amet duo labore stet elitr ea clita ipsum, tempor\r\n                        labore accusam ipsum et no at. Kasd diam tempor rebum\r\n                        magna dolores sed sed eirmod ipsum.',	'1',	'2024-10-01 07:49:05',	2),
+(7,	3,	'                        Diam amet duo labore stet elitr ea clita ipsum, tempor\r\n                        labore accusam ipsum et no at. Kasd diam tempor rebum\r\n                        magna dolores sed sed eirmod ipsum.',	'1',	'2024-10-01 07:49:18',	2),
+(8,	1,	'                        Diam amet duo labore stet elitr ea clita ipsum, tempor\r\n                        labore accusam ipsum et no at. Kasd diam tempor rebum\r\n                        magna dolores sed sed eirmod ipsum.',	'1',	'2024-10-01 07:49:31',	3),
+(9,	2,	'                        Diam amet duo labore stet elitr ea clita ipsum, tempor\r\n                        labore accusam ipsum et no at. Kasd diam tempor rebum\r\n                        magna dolores sed sed eirmod ipsum.',	'1',	'2024-10-01 07:49:55',	3),
+(10,	1,	'11111',	'1',	'2024-10-01 07:56:38',	2),
+(11,	1,	'2222',	'1',	'2024-10-01 07:57:12',	2),
+(12,	1,	'333333333333',	'1',	'2024-10-01 08:05:35',	2),
+(13,	1,	'ssss',	'1',	'2024-10-01 08:08:25',	1),
+(14,	4,	'rrrrrrrrrrrrrrrrrrrrrrrrrr',	'1',	'2024-10-01 08:42:11',	3),
+(15,	4,	'dddd',	'1',	'2024-10-01 11:01:39',	3),
+(16,	4,	'111111122223333',	'1',	'2024-10-01 11:04:53',	5),
+(17,	4,	'fgdtdrtdrydfgdsetse',	'1',	'2024-10-01 11:11:20',	4),
+(18,	4,	'sdfsfwssfsf111111',	'1',	'2024-10-01 11:28:04',	8),
+(19,	4,	'6767676',	'1',	'2024-10-01 11:28:10',	8);
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `active` varchar(1) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `dummy_column` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+INSERT INTO `user` (`id`, `name`, `email`, `password`, `active`, `create_date`, `end_date`, `dummy_column`) VALUES
+(1,	'John',	'john1@gmail.com',	'pbkdf2:sha256:600000$lzE6C3RvmUyudzBh$47d55a97248e8c7581e9bea532ef5032d32a22a456ca16275362e39c5abe6cff',	'1',	'2024-09-26 12:04:38',	NULL,	NULL),
+(2,	'John2',	'john2@gmail.com',	'pbkdf2:sha256:600000$TlynvaEdNSU66wnh$ff92318598c91a47ddc5cc248499e2a355215de24c1ebe24958770c70da69c4e',	'1',	'2024-09-26 12:18:37',	NULL,	NULL),
+(3,	'Monica',	'Monica1@gmail.com',	'pbkdf2:sha256:600000$GdGNKoYTqND99U4H$b369589a68772ba5c2abebd3d8ae9c46632fc3a3500b57bbd74da5566f66a036',	'1',	'2024-09-28 17:22:46',	NULL,	NULL),
+(4,	'Sabira',	'SabiraF@gmail.com',	'pbkdf2:sha256:600000$8skSqWatBFqRtiBw$c8e62034436b630a2071d9c1fb6b368abe7152dedf79bdea0930150257c20e0e',	'1',	'2024-10-01 08:41:37',	NULL,	NULL);
+
+-- 2024-10-01 13:12:34

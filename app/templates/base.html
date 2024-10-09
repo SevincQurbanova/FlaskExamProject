@@ -65,18 +65,23 @@
             </h1>
           </a>
         </div>
+
+
+
         <div class="col-lg-6 col-6 text-left">
-          <form action="">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="Search for products" />
-              <div class="input-group-append">
-                <span class="input-group-text bg-transparent text-primary">
-                  <i class="fa fa-search"></i>
-                </span>
+          <form action="{{ url_for('routes_bp.search') }}" method="GET">
+              <div class="input-group">
+                  <input type="text" name="query" class="form-control" placeholder="Search for products" />
+                  <div class="input-group-append">
+                      <button type="submit" class="btn bg-transparent text-primary">
+                          <i class="fa fa-search"></i>
+                      </button>
+                  </div>
               </div>
-            </div>
           </form>
-        </div>
+      </div>
+
+
         <div class="col-lg-3 col-6 text-right">
          
             <a href="{{ url_for('routes_bp.favorite') }}" class="btn border">
@@ -105,12 +110,14 @@
           <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0 bg-light" id="navbar-vertical" style="width: calc(100% - 30px); z-index: 1">
             <div class="navbar-nav w-100 overflow-hidden" style="height: 410px">
 
-              {% block categories %}
-              {% for category in categories %}
-                <a href="{{ url_for('routes_bp.shop', category=category.id) }}" class="nav-item nav-link">{{ category.name }}</a>
-              {% endfor %}
-              {% endblock %}
-
+            {% block categories %}
+            {% for category in categories_with_count %}
+                <a href="{{ url_for('routes_bp.shop', category=category.id) }}" class="nav-item nav-link">
+                    {{ category.name }} ({{ category.product_count }})
+                </a>
+            {% endfor %}
+        {% endblock %}
+        
    
             </div>
 
@@ -131,9 +138,7 @@
                 <a href="{{ url_for('routes_bp.home') }}" class="nav-item nav-link">Shop</a>
 
 
-                {% for product in products %}
-                <a href="{{ url_for('routes_bp.detail', product_id=product.id) }}" class="nav-item nav-link">Shop Detail</a>
-                {% endfor %}
+        <a href="{{ url_for('routes_bp.detail', product_id=1) }}" class="nav-item nav-link">Shop Detail</a>
 
                 <a href="{{ url_for('routes_bp.contact') }}" class="nav-item nav-link active">Contact</a>
                 

@@ -20,30 +20,38 @@
 
                 <!-- WTForms-based Registration Form -->
                 <form method="POST" action="{{ url_for('routes_bp.register') }}">
-                    {{ form.hidden_tag()}}
+                    {{ form.hidden_tag() }}
 
                     <div class="control-group">
                         {{ form.name.label(class="form-label") }}
                         {{ form.name(class="form-control") }}
-                        <p class="help-block text-danger"></p>
+                        {% if form.name.errors %}
+                            <p class="help-block text-danger">{{ form.name.errors[0] }}</p>
+                        {% endif %}
                     </div>
 
                     <div class="control-group">
                         {{ form.email.label(class="form-label") }}
                         {{ form.email(class="form-control") }}
-                        <p class="help-block text-danger"></p>
+                        {% if form.email.errors %}
+                            <p class="help-block text-danger">{{ form.email.errors[0] }}</p>
+                        {% endif %}
                     </div>
 
                     <div class="control-group">
                         {{ form.password.label(class="form-label") }}
                         {{ form.password(class="form-control") }}
-                        <p class="help-block text-danger"></p>
+                        {% if form.password.errors %}
+                            <p class="help-block text-danger">{{ form.password.errors[0] }}</p>
+                        {% endif %}
                     </div>
 
                     <div class="control-group">
                         {{ form.confirm_password.label(class="form-label") }}
                         {{ form.confirm_password(class="form-control") }}
-                        <p class="help-block text-danger"></p>
+                        {% if form.confirm_password.errors %}
+                            <p class="help-block text-danger">{{ form.confirm_password.errors[0] }}</p>
+                        {% endif %}
                     </div>
 
                     <div class="d-flex justify-content-center">
@@ -58,5 +66,3 @@
 <!-- Register Form End -->
 
 {% endblock %}
-
-

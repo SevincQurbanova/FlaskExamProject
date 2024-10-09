@@ -4,9 +4,12 @@ from app.models import User, Product, ProductDetailImages, Favorite, Review, Con
 from app.forms import LoginForm, RegisterForm, ContactForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import jsonify
+from sqlalchemy import or_
 
 # Create a blueprint
 routes_bp = Blueprint('routes_bp', __name__)
+
+
 
 @routes_bp.route('/')
 @routes_bp.route('/home', endpoint='home')
@@ -14,6 +17,9 @@ def shop():
     # Use the shop function to get data
     context = get_shop_data()
     return render_template('shop.html', **context)
+
+
+
 
 @routes_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -87,6 +93,32 @@ def register():
 
     return render_template('register.html', form=form)
 
+
+@routes_bp.route('/search')
+def search():
+    query = request.args.get('query')
+
+    # If the search query is empty, redirect to the shop page
+    if not query:
+        flash('Please enter a search term.', 'warning')
+        return redirect(url_for('routes_bp.shop'))
+
+    # Search products by name or description
+    search_results = Product.query.filter(
+        or_(
+            Product.name.ilike(f'%{query}%'),
+            Product.description.ilike(f'%{query}%')
+        )
+    ).all()
+
+    if not search_results:
+        flash('No products found matching your search.', 'warning')
+
+    # Reuse the shop.html template to display the search results
+    return render_template('shop.html', products=search_results, search_query=query)
+
+
+
 @routes_bp.route('/add_to_favorite/<int:product_id>', methods=['POST'])
 def add_to_favorite(product_id):
     user_id = session.get('user_id')  # Assuming the user is logged in and their ID is stored in the session
@@ -120,6 +152,7 @@ def add_to_favorite(product_id):
 
 
 
+
 @routes_bp.route('/product/<int:product_id>')
 def detail(product_id):
     # Fetch the product from the database by ID
@@ -132,9 +165,19 @@ def detail(product_id):
     reviews = Review.query.filter_by(product_id=product_id, active='1').all()
     review_count = len(reviews)
 
-    related_products = Product.query.filter(Product.id != product_id).limit(8).all() 
+    # Fetch related products from the same category, excluding the current product
+    related_products = Product.query.filter(
+        Product.category_id == product.category_id,  # Same category
+        Product.id != product_id  # Exclude the current product
+    ).limit(8).all()
+
     # Pass the product to the template
-    return render_template('detail.html', product=product, product_images=product_images, reviews=reviews, review_count=review_count,related_products=related_products)
+    return render_template('detail.html', 
+                           product=product, 
+                           product_images=product_images, 
+                           reviews=reviews, 
+                           review_count=review_count, 
+                           related_products=related_products)
 
 
 
@@ -175,7 +218,6 @@ def remove_favorite(product_id):
 
     return redirect(url_for('routes_bp.favorite'))
 
-
 @routes_bp.route('/add_review/<int:product_id>', methods=['POST'])
 def add_review(product_id):
     user_id = session.get('user_id')
@@ -203,6 +245,7 @@ def add_review(product_id):
         db.session.rollback()
         return jsonify({'error': 'An error occurred while submitting your review.'}), 500
 
+
 @routes_bp.route('/contact', methods=['GET', 'POST'])
 def contact():
     form = ContactForm()
@@ -220,10 +263,10 @@ def contact():
             db.session.add(new_contact)
             db.session.commit()
             flash('Your message has been sent successfully!', 'success')
+            return redirect(url_for('routes_bp.contact'))  # Redirect after form submission
         except Exception as e:
             db.session.rollback()
             flash('An error occurred while submitting your message. Please try again later.', 'danger')
 
-    # Render the form and pass any flash messages
     return render_template('contact.html', form=form)
 

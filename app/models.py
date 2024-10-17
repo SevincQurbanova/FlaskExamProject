@@ -1,6 +1,5 @@
-from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
-from app import db  # Import db from __init__.py
+from app import db 
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -77,6 +76,3 @@ class Contact(db.Model):
     create_date = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref='contacts')  # 'contacts' used for clarity, can be None for unregistered users
-
-      
-

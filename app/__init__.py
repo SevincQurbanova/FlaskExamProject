@@ -5,6 +5,8 @@ from flask_migrate import Migrate
 from flask_admin import Admin as FlaskAdmin  # Avoid naming conflict
 from sqlalchemy import create_engine, text
 from flask_wtf import CSRFProtect
+from sqlalchemy import func
+
 
 db = SQLAlchemy()
 migrate = Migrate()
@@ -40,12 +42,26 @@ def create_app():
     # Enable CSRF protection
     csrf.init_app(app)
 
-    # Context Processor
+    #Context Processor
     @app.context_processor
     def inject_categories():
         from app.models import Category
         categories = Category.query.all()  # Fetch categories from the database
         return dict(categories=categories)
+
+
+
+    @app.context_processor
+    def inject_categories_with_count():
+     # Fetch categories and product count for each category
+     from app.models import Category, Product
+     categories_with_count = db.session.query(
+        Category.id,
+        Category.name,
+        func.count(Product.id).label('product_count')
+     ).outerjoin(Product, Product.category_id == Category.id).group_by(Category.id).all()
+
+     return dict(categories_with_count=categories_with_count)
 
     # Context Processor for favorites count
     @app.context_processor

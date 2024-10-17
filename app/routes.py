@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash, session
-from app.controllers import register_user, get_shop_data
+from app.controllers import get_shop_data,get_categories_with_count
 from app.models import User, Product, ProductDetailImages, Favorite, Review, Contact, db
 from app.forms import LoginForm, RegisterForm, ContactForm
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -24,6 +24,7 @@ def shop():
 @routes_bp.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()  # Instantiate the form
+    context = get_categories_with_count() 
     if form.validate_on_submit():
         email = form.email.data
         password = form.password.data
@@ -46,7 +47,8 @@ def login():
             flash('Invalid email or password', 'danger')
 
     print("Form validation failed.")  # Debugging message
-    return render_template('login.html', form=form)
+    
+    return render_template('login.html', form=form, **context)
 
 @routes_bp.route('/logout')
 def logout():
@@ -58,7 +60,7 @@ def logout():
 @routes_bp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-
+    context=get_categories_with_count() 
     if form.validate_on_submit():
         # Check if the email is already registered
         if User.query.filter_by(email=form.email.data).first():
@@ -90,9 +92,10 @@ def register():
     else:
         # If form validation fails, print errors
         print(form.errors)  # This will print validation errors to the console if there are any
+    
+       
 
-    return render_template('register.html', form=form)
-
+    return render_template('register.html', form=form, **context)
 
 @routes_bp.route('/search')
 def search():
